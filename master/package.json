@@ -1,12 +1,12 @@
 {
-  "name": "directshare-master",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "node master.js"
-  },
-  "dependencies": {
-    "express": "3.4.8",
-    "ejs": "*"
-  }
+    "name": "directshare-master",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "node master.js"
+    },
+    "dependencies": {
+        "express": "3.3.4",
+        "ejs": "*"
+    }
 }
