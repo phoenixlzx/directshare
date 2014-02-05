@@ -1,0 +1,12 @@
+{
+  "name": "directshare-cluster",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node cluster.js"
+  },
+  "dependencies": {
+    "express": "3.4.8",
+    "jade": "*"
+  }
+}
