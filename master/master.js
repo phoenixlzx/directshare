@@ -9,6 +9,7 @@ var path = require('path');
 var config = require('./config.js');
 var crypto = require('crypto');
 var fs = require('fs');
+var querystring = require('querystring');
 
 var app = express();
 
@@ -53,7 +54,32 @@ app.post('/', function(req, res) {
         // move file to storage location
         fs.rename(req.files.uploadfile.path, 'files/' + d, function() {
             // notify clusters to fetch file
+            config.clusters.forEach(function(cluster) {
+                var post_data = querystring.stringify({
+                    clusterkey: config.clusterkey,
+                    filename: req.files.uploadfile.name,
+                    filehash: d
+                });
 
+                var post_options = {
+                    hostname: cluster,
+                    port: config.clustersport,
+                    path: '/syncfile',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Length': post_data.length
+                    }
+                }
+
+                // Set up the request
+                console.log('syncing with ' + cluster);
+                var post_req = http.request(post_options);
+
+                // post the data
+                post_req.write(post_data);
+                post_req.end();
+            });
             // return client with download path
             res.send(200, config.clusterurl + d);
         });
@@ -61,12 +87,13 @@ app.post('/', function(req, res) {
 });
 
 app.post('/syncfile', function(req, res) {
-    if (req.body.accesskey != config.clusterkey) {
+    if (req.body.clusterkey != config.clusterkey) {
         return res.send(401);
     } else {
         res.sendfile('files/' + req.body.filehash);
     }
 });
+
 
 // handle 404
 app.use(function(req, res) {
