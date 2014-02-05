@@ -1,4 +1,5 @@
 .idea/
 master/node_modules/
+master/config.js
 cluster/node_modules/
-config.js
+cluster/config.js
